@@ -1,8 +1,11 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/vobiz/(.*)", "destination": "/api/index.js" },
-    { "source": "/api/(.*)", "destination": "/api/index.js" },
+    { "source": "/vobiz/answer", "destination": "/api/vobiz/answer" },
+    { "source": "/vobiz/events", "destination": "/api/vobiz/events" },
+    { "source": "/api/config", "destination": "/api/index.js" },
+    { "source": "/api/calls", "destination": "/api/index.js" },
+    { "source": "/api/calls/dial", "destination": "/api/index.js" },
     { "source": "/health", "destination": "/api/index.js" }
   ]
 }
