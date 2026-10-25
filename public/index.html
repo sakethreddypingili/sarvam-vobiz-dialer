@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browser Phone Dialer | Sarvam Phone</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="logo-icon">📞</div>
+        <div>
+          <h1>Browser Phone Dialer</h1>
+          <p class="subtitle">Your Sarvam number · Real calls</p>
+        </div>
+      </div>
+      <button id="settingsBtn" class="icon-btn" title="Settings">⚙️</button>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+      <!-- Left: Dialer Device -->
+      <section class="dialer-card">
+        <!-- Caller ID Banner -->
+        <div class="caller-id-badge">
+          <span class="status-dot active"></span>
+          <span>From: <strong id="callerIdDisplay">+91 99999 00000</strong></span>
+        </div>
+
+        <!-- Phone Display -->
+        <div class="display-container">
+          <label class="display-label">Enter phone number</label>
+          <div class="number-input-row">
+            <span class="country-code">+91</span>
+            <input type="tel" id="phoneNumber" placeholder="__________" maxlength="15" autocomplete="off" />
+            <button id="backspaceBtn" class="icon-btn backspace" title="Delete">⌫</button>
+          </div>
+        </div>
+
+        <!-- Keypad Grid -->
+        <div class="keypad">
+          <button class="key-btn" data-key="1"><span class="digit">1</span><span class="letters">&nbsp;</span></button>
+          <button class="key-btn" data-key="2"><span class="digit">2</span><span class="letters">ABC</span></button>
+          <button class="key-btn" data-key="3"><span class="digit">3</span><span class="letters">DEF</span></button>
+          
+          <button class="key-btn" data-key="4"><span class="digit">4</span><span class="letters">GHI</span></button>
+          <button class="key-btn" data-key="5"><span class="digit">5</span><span class="letters">JKL</span></button>
+          <button class="key-btn" data-key="6"><span class="digit">6</span><span class="letters">MNO</span></button>
+          
+          <button class="key-btn" data-key="7"><span class="digit">7</span><span class="letters">PQRS</span></button>
+          <button class="key-btn" data-key="8"><span class="digit">8</span><span class="letters">TUV</span></button>
+          <button class="key-btn" data-key="9"><span class="digit">9</span><span class="letters">WXYZ</span></button>
+          
+          <button class="key-btn" data-key="*"><span class="digit">*</span><span class="letters">&nbsp;</span></button>
+          <button class="key-btn" data-key="0"><span class="digit">0</span><span class="letters">+</span></button>
+          <button class="key-btn" data-key="#"><span class="digit">#</span><span class="letters">&nbsp;</span></button>
+        </div>
+
+        <!-- Call Actions -->
+        <div class="actions-row">
+          <button id="callBtn" class="call-btn">
+            <span class="btn-icon">📞</span>
+            <span class="btn-text">Call</span>
+          </button>
+          <button id="hangupBtn" class="hangup-btn hidden">
+            <span class="btn-icon">🔴</span>
+            <span class="btn-text">End</span>
+          </button>
+        </div>
+
+        <!-- Call Status & Active Call Overlay -->
+        <div id="callOverlay" class="call-overlay hidden">
+          <div class="call-animation">
+            <div class="pulse-ring"></div>
+            <div class="phone-avatar">📞</div>
+          </div>
+          <h3 id="callStateTitle">Calling...</h3>
+          <p id="callingNumber" class="target-number">+91 __________</p>
+          <div id="callTimer" class="call-timer">00:00</div>
+          
+          <!-- Mic & Speaker controls -->
+          <div class="audio-controls">
+            <button id="micBtn" class="audio-ctrl-btn active" title="Toggle Mic">
+              <span class="ctrl-icon">🎙️</span>
+              <span class="ctrl-label">Mute Mic</span>
+            </button>
+            <button id="speakerBtn" class="audio-ctrl-btn active" title="Toggle Speaker">
+              <span class="ctrl-icon">🔊</span>
+              <span class="ctrl-label">Speaker</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Controls & History -->
+      <section class="side-panel">
+        <!-- Audio Hardware Controls -->
+        <div class="panel-card">
+          <h3>Microphone & Speaker</h3>
+          <div class="media-settings">
+            <div class="media-row">
+              <label>Microphone</label>
+              <select id="micSelect">
+                <option value="default">Default Microphone</option>
+              </select>
+            </div>
+            <div class="media-row">
+              <label>Audio Output</label>
+              <select id="speakerSelect">
+                <option value="default">Default Speaker</option>
+              </select>
+            </div>
+            <div class="audio-meter-container">
+              <span>Input Level</span>
+              <div class="meter-bar">
+                <div id="meterFill" class="meter-fill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Calls & Duration -->
+        <div class="panel-card history-card">
+          <div class="card-header">
+            <h3>Recent Calls</h3>
+            <span id="callCountBadge" class="badge">0</span>
+          </div>
+          <div id="recentCallsList" class="recent-calls-list">
+            <div class="empty-state">No recent calls yet</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Telephony & Calling Setup</h2>
+          <button id="closeSettingsBtn" class="close-btn">&times;</button>
+        </div>
+        
+        <!-- Vobiz Answer URL Box (Direct Copy for Vobiz Voice Application) -->
+        <div class="vobiz-webhook-box" style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 12px; padding: 14px; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="font-weight: 700; color: #38bdf8; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Vobiz Answer URL (Webhook)</label>
+            <span style="font-size: 0.72rem; background: rgba(34, 197, 94, 0.15); color: #4ade80; padding: 2px 8px; border-radius: 9999px;">Live Endpoint</span>
+          </div>
+          <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 10px 0; line-height: 1.4;">Paste this public URL into your <strong>Vobiz Voice Application &rarr; Answer URL</strong> field:</p>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="vobizAnswerUrlInput" readonly style="flex: 1; font-family: monospace; font-size: 0.82rem; background: #0f172a; color: #e2e8f0; border: 1px solid #334155; border-radius: 8px; padding: 8px 12px;" />
+            <button type="button" id="copyAnswerUrlBtn" style="background: #0284c7; color: white; border: none; border-radius: 8px; padding: 8px 14px; font-weight: 600; cursor: pointer; font-size: 0.82rem;">Copy</button>
+          </div>
+          <span id="copySuccessMsg" style="display: none; font-size: 0.75rem; color: #4ade80; margin-top: 4px;">✓ Copied to clipboard!</span>
+        </div>
+
+        <form id="settingsForm">
+          <p class="modal-hint">Connect your Sarvam / Vobiz number and connection to route real phone calls.</p>
+          
+          <div class="form-group">
+            <label>Caller Phone Number</label>
+            <input type="text" id="cfgAgentNumber" placeholder="+918047168000" />
+            <small>Your registered Vobiz / Sarvam outbound phone number</small>
+          </div>
+
+          <div class="form-group">
+            <label>Telephony Connection ID</label>
+            <input type="text" id="cfgConnectionId" placeholder="e.g. conn_vobiz_01..." />
+            <small>Found in Sarvam Samvaad → Deploy → Telephony / Connections</small>
+          </div>
+
+          <div class="form-group">
+            <label>App ID (Voice Agent ID)</label>
+            <input type="text" id="cfgAppId" placeholder="e.g. my-voice-agent" />
+            <small>Agent or test echo agent created in Samvaad</small>
+          </div>
+
+          <div class="form-group">
+            <label>App Version</label>
+            <input type="number" id="cfgAppVersion" value="1" min="1" />
+          </div>
+
+          <div class="modal-actions">
+            <button type="submit" class="save-btn">Save Configuration</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
