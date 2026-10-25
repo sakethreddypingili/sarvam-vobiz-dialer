@@ -14,6 +14,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Vobiz webhooks often send application/x-www-form-urlencoded
+
+// Restore original requested URL if proxied/rewritten by Vercel
+app.use((req, res, next) => {
+  if (req.headers['x-matched-path']) {
+    req.url = req.headers['x-matched-path'];
+  }
+  next();
+});
+
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // In-memory call history
